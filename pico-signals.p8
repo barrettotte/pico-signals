@@ -5,10 +5,12 @@ __lua__
 -- bARRETT oTTE. 2022
 
 function _init()
+  is_playing = false
+
   sig = {
     freq = 4,
     amp = 24,
-    offset = 55,
+    offset = 56,
     sample = 127
   }
   settings = {
@@ -20,17 +22,27 @@ function _init()
   waveforms = {
     "sine",
     "square",
-    "triangle"
+    "triangle",
+    -- "off"
   }
   setting = 0
-  waveform = 1--0
+  waveform = 2
   last = time()
 end
 
 function _update()
+
+  -- title screen
+  if not is_playing then
+    if btnp(❎) then
+      is_playing = true
+    end
+    return
+  end
+
   local s = settings[setting + 1]
 
-  if btn(❎) and (time() - last) > 0.25 then
+  if btnp(❎) and (time() - last) > 0.25 then
     waveform += 1
     if waveform >= #waveforms then
       waveform = 0
@@ -42,81 +54,95 @@ function _update()
     return -- debounce
   end
 
-	if btn(➡️) then
+  if btn(➡️) then
     sig[s] = min(sig[s]+1, 255)
     last = time()
-	end
+  end
 
-	if btn(⬅️) then
+  if btn(⬅️) then
     sig[s] -= 1
     if setting ~= 3 then
       sig[s] = max(sig[s], 0)
     end
     last = time()
-	end
+  end
 
-	if btnp(⬆️) then
-		setting -= 1
+  if btnp(⬆️) then
+    setting -= 1
     last = time()
-	end
+  end
 
-	if btnp(⬇️) then
+  if btnp(⬇️) then
     setting += 1
     last = time()
-	end
+  end
 
-	setting %= #settings
+  setting %= #settings
 end
 
 function _draw()
-	cls()
+  cls()
+  print("pICO sIGNALS", 40, 0, 11)
+
+  -- draw title screen
+  if not is_playing then
+    print("bARRETT oTTE", 40, 20, 11)
+    print("pico-1K jAM 2022", 32, 30, 11)
+    print(" ❎  - change wave", 26, 60, 7)
+    print("⬅️➡️ - change value", 26, 70, 7)
+    print("⬆️⬇️ - navigate menu", 26, 80, 7)
+    print("press ❎ to start", 32, 100, 11)
+    return
+  end
 
   -- axes
   line(63, 10, 63, 105, 1)
-  line(0, 55, 127, 55, 1)
+  line(0, 56, 127, 56, 1)
+
+  -- print waveform
+  print(waveforms[waveform+1], 3, 13, 7)
 
   draw_signal()
 
   -- border
-  rectfill(0, 0, 127, 8, 0)
+  rectfill(0, 10, 127, 8, 0)
   line(0, 9, 127, 9, 7)
   line(0, 104, 127, 104, 7)
   line(0, 10, 0, 104, 7)
   line(127, 10, 127, 104, 7)
   rectfill(0, 105, 127, 127, 0)
 
-  print("pICO sIGNALS", 40, 0, 7)
-	draw_menu()
+  draw_menu()
 end
 
 function draw_signal()
   local p = 128 / sig.freq
-	local dx = 128 / sig.sample
+  local dx = 128 / sig.sample
 
-	for x=0,127,dx do
+  for x=0,127,dx do
     if waveform == 0 then
-		  line(x, ceil(sig.amp * sin(x/p) + sig.offset), x+dx, ceil(sig.amp * sin((x+dx) / p) + sig.offset), 11)
+      line(x, ceil(sig.amp * sin(x/p) + sig.offset), x+dx, ceil(sig.amp * sin((x+dx) / p) + sig.offset), 11)
     elseif waveform == 1 then
       line(x, sig.amp * min(sgn(sin(x/p)),0) + sig.offset, x+dx, sig.amp * min(sgn(sin((x+dx)/p)),0) + sig.offset, 11)
     elseif waveform == 2 then
       -- https://en.wikipedia.org/wiki/Triangle_wave  (use general definition)
       line(x, sig.amp * (1) + sig.offset, x+dx, sig.amp * (1) + sig.offset, 11)
     else
-      line(x, sig.amp * sin(x/p) + sig.offset, x+dx, sig.amp * sin((x+dx) / p + sig.offset), 11)
+      line(x, sig.offset, x+dx, sig.offset, 11)
     end
-	end
+  end
 end
 
 function draw_menu()
-	local x = 8
-	local y = 107
+  local x = 8
+  local y = 107
 
-	for i=1,#settings do
-		local s = settings[i]
+  for i=1,#settings do
+    local s = settings[i]
     local v = sig[s]
 
     if i == 3 then
-      v = 128-v-73 -- zero adjust offset value
+      v = 128-v-72 -- zero adjust offset value
     end
 
     -- show selected menu entry
@@ -131,7 +157,7 @@ function draw_menu()
       y = 107
     end
 
-		print(s.."="..v, x+3, y+3, c)
-		y += 10
-	end
+    print(s.."="..v, x+3, y+3, c)
+    y += 10
+  end
 end
