@@ -6,7 +6,34 @@ A signal generator in PICO-8. My entry for the PICO-1K Jam 2022.
 
 ## Description
 
-TODO:
+A little "signal generator" with sine, square, triangle, and sawtooth waves.
+The wave's frequency, amplitude, and offset can be changed. 
+A sample rate can also be set that controls how smooth the wave is drawn.
+
+For the game jam I compressed my code to 849 bytes. I could probably do better, but I met my goal of getting under 850.
+The uncompressed version of source is at [docs/pico-signals-uncompressed.p8](docs/pico-signals-uncompressed.p8).
+
+### Screenshots
+
+![docs/img/title.png](docs/img/title.png)
+![docs/img/sine.png](docs/img/sine.png)
+
+<details>
+  <summary>Square wave</summary>
+  <img src="docs/img/square.png" alt="square"/>
+</details>
+<details>
+  <summary>Triangle wave</summary>
+  <img src="docs/img/triangle.png" alt="triangle"/>
+</details>
+<details>
+  <summary>Sawtooth wave</summary>
+  <img src="docs/img/sawtooth.png" alt="sawtooth"/>
+</details>
+<details>
+  <summary>Compressed bytes output</summary>
+  <img src="docs/img/compressed.png" alt="compressed"/>
+</details>
 
 ## Controls
 
@@ -15,13 +42,6 @@ TODO:
   <li><kbd>←</kbd> / <kbd>→</kbd> - Change wave values</li>
   <li><kbd>↑</kbd> / <kbd>↓</kbd> - Navigate menu</li>
 </ul>
-
-## Screenshots
-
-- TODO: title
-- TODO: sine
-- TODO: square
-- TODO: triangle
 
 ## Development
 
