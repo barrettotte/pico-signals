@@ -1,181 +1,59 @@
 pico-8 cartridge // http://www.pico-8.com
 version 38
 __lua__
--- pICO sIGNALS
--- bARRETT oTTE. 2022
-
 function _init()
-  is_playing = false
-
-  sig = {
-    freq = 6,
-    amp = 12,
-    offset = 56,
-    sample = 127
-  }
-  settings = {
-    "freq",
-    "amp",
-    "offset",
-    "sample"
-  }
-  waveforms = {
-    "sine",
-    "square",
-    "triangle",
-    "sawtooth"
-    -- "off"
-  }
-  setting = 0
-  waveform = 1
-  last = time()
+  r,x,y,z=0 l=time()
+  s={freq=6,amp=12,offset=56,sample=127}
+  a={"freq","amp","offset","sample"} b=0
+  c={"sine","square","triangle","sawtooth"} d=1
 end
-
 function _update()
-
-  -- title screen
-  if not is_playing then
-    if btnp(❎) then
-      is_playing = true
-    end
-    return
-  end
-
-  local s = settings[setting + 1]
-
-  if btnp(❎) and (time() - last) > 0.25 then
-    waveform += 1
-    if waveform >= #waveforms then
-      waveform = 0
-    end
-    last = time()
-  end
-
-  if (time() - last) < 0.05 then
-    return -- debounce
-  end
-
-  if btn(➡️) then
-    sig[s] = min(sig[s]+1, 255)
-    last = time()
-  end
-
-  if btn(⬅️) then
-    sig[s] -= 1
-    if setting ~= 3 then
-      sig[s] = max(sig[s], 0)
-    end
-    last = time()
-  end
-
-  if btnp(⬆️) then
-    setting -= 1
-    last = time()
-  end
-
-  if btnp(⬇️) then
-    setting += 1
-    last = time()
-  end
-
-  setting %= #settings
+  if r==0 then if btnp(❎)then r=1 end return end x=a[b+1]
+  if btnp(❎) and (time()-l)>0.25 then d+=1 if d>=#c then d=0 end l=time()end
+  if(time()-l)<0.05 then return end
+  if btn(➡️)then s[x]=min(s[x]+1,255) l=time()end
+  if btn(⬅️)then s[x]-=1 if b~=3 then s[x]=max(s[x],0)end l=time()end
+  if btnp(⬆️)then b-=1 l=time()end
+  if btnp(⬇️)then b+=1 l=time()end
+  b%=#a
 end
-
 function _draw()
   cls()
-  print("pICO sIGNALS", 40, 0, 11)
-
-  -- draw title screen
-  if not is_playing then
-    print("bARRETT oTTE", 40, 20, 11)
-    print("pico-1K jAM 2022", 32, 30, 11)
-    print(" ❎  - change wave", 26, 60, 7)
-    print("⬅️➡️ - change value", 26, 70, 7)
-    print("⬆️⬇️ - navigate menu", 26, 80, 7)
-    print("press ❎ to start", 32, 100, 11)
+  print("pICO sIGNALS",40,0,11)
+  if r==0 then
+    print("bARRETT oTTE",40,20)
+    print("pico-1K jAM 2022",32,30)
+    print(" ❎  - change wave",26,60,7)
+    print("⬅️➡️ - change value",26,70)
+    print("⬆️⬇️ - navigate menu",26,80)
+    print("press ❎ to start",32,100,11)
     return
   end
-
-  -- axes
-  line(63, 10, 63, 105, 1)
-  line(0, 56, 127, 56, 1)
-
-  -- print waveform
-  print(waveforms[waveform+1], 3, 13, 7)
-
-  draw_signal()
-
-  -- border
-  rectfill(0, 10, 127, 8, 0)
-  line(0, 9, 127, 9, 7)
-  line(0, 104, 127, 104, 7)
-  line(0, 10, 0, 104, 7)
-  line(127, 10, 127, 104, 7)
-  rectfill(0, 105, 127, 127, 0)
-
-  draw_menu()
-end
-
-function draw_signal()
-  local p = 128 / sig.freq
-  local dx = 128 / sig.sample
-
-  for x=0,128,dx do
-    if waveform == 0 then
-      line(x, sig_sine(x,p), x+dx, sig_sine(x+dx,p), 11)
-    elseif waveform == 1 then
-      line(x, sig_square(x,p), x+dx, sig_square(x+dx,p), 11)
-    elseif waveform == 2 then
-      line(x, sig_triangle(x,p), x+dx, sig_triangle(x+dx,p), 11)
-    elseif waveform == 3 then
-      line(x, sig_saw(x,p), x+dx, sig_saw(x+dx,p), 11)
-    else
-      line(x, sig.offset, x+dx, sig.offset, 11)
-    end
+  line(63,10,63,105,1)
+  line(0,56,127,56)
+  print(c[d+1],3,13,7)
+  y=128/s.freq z=128/s.sample
+  for x=0,128,z do
+    if d==0 then line(x,s1(x,y),x+z,s1(x+z,y),11)
+    elseif d==1 then line(x,s2(x,y),x+z,s2(x+z,y),11)
+    elseif d==2 then line(x,s3(x,y),x+z,s3(x+z,y),11)
+    else line(x,s4(x,y),x+z,s4(x+z,y),11)end
+  end
+  rectfill(0,10,127,8,0)
+  line(0,9,127,9,7)
+  line(0,104,127,104)
+  line(0,10,0,104)
+  line(127,10,127,104)
+  rectfill(0,105,127,127,0)
+  x=8 y=107
+  for i=1,#a do
+    z=s[a[i]]if i==3 then x+=68 y=107 z=128-s[a[i]]-72 end
+    print(a[i].."="..z,x+3,y+3,a[i]==a[b+1]and 11 or 7)
+    y+=10
   end
 end
-
-function sig_sine(t,p)
-  return ceil(sig.amp * sin(t/p) + sig.offset)
-end
-
-function sig_square(t,p)
-  return sig.amp * sgn(sin(t/p)) + sig.offset
-end
-
-function sig_triangle(t,p)
-  return sig.amp * (2*abs(2*((t/p)-flr((t/p)+(1/2))))-1) + sig.offset
-end
-
-function sig_saw(t,p)
-  return sig.amp * ((t/p)-flr((1/2)+(t/p))) + sig.offset
-end
-
-function draw_menu()
-  local x = 8
-  local y = 107
-
-  for i=1,#settings do
-    local s = settings[i]
-    local v = sig[s]
-
-    if i == 3 then
-      v = 128-v-72 -- zero adjust offset value
-    end
-
-    -- show selected menu entry
-    local c = 7
-    if s == settings[setting + 1] then
-      c = 11
-    end
-
-    -- next column of menu
-    if i == 3 then
-      x += 68
-      y = 107
-    end
-
-    print(s.."="..v, x+3, y+3, c)
-    y += 10
-  end
-end
+function sw(i)return s.amp*i+s.offset end
+function s1(t,p)return ceil(sw(sin(t/p)))end
+function s2(t,p)return sw(sgn(sin(t/p)))end
+function s3(t,p)return sw(2*abs(2*((t/p)-flr((t/p)+0.5)))-1)end
+function s4(t,p)return sw((t/p)-flr(0.5+(t/p)))end
