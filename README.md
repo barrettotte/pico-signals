@@ -2,7 +2,9 @@
 
 A small signal generator in PICO-8. My entry for the PICO-1K Jam 2022.
 
-[Pico 1K Jam 2022 (09/01 - 09/30)](https://itch.io/jam/pico-1k-2022)
+[Pico 1K Jam 2022 (09/01 - 09/30)](https://itch.io/jam/pico-1k-2022) - [my entry](https://itch.io/jam/pico-1k-2022/rate/1706193)
+
+Play at [https://barrettotte.itch.io/pico-signals](https://barrettotte.itch.io/pico-signals)
 
 ## Description
 
