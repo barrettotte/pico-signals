@@ -27,7 +27,7 @@ function _init()
     -- "off"
   }
   setting = 0
-  waveform = 1
+  waveform = 0
   last = time()
 end
 

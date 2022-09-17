@@ -5,7 +5,7 @@ function _init()
   r,x,y,z=0 l=time()
   s={freq=6,amp=12,offset=56,sample=127}
   a={"freq","amp","offset","sample"} b=0
-  c={"sine","square","triangle","sawtooth"} d=1
+  c={"sine","square","triangle","sawtooth"} d=0
 end
 function _update()
   if r==0 then if btnp(❎)then r=1 end return end x=a[b+1]
