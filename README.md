@@ -1,6 +1,6 @@
 # pico-signals
 
-A signal generator in PICO-8. My entry for the PICO-1K Jam 2022.
+A small signal generator in PICO-8. My entry for the PICO-1K Jam 2022.
 
 [Pico 1K Jam 2022 (09/01 - 09/30)](https://itch.io/jam/pico-1k-2022)
 
@@ -52,6 +52,11 @@ The uncompressed version of source is at [docs/pico-signals-uncompressed.p8](doc
 
 - Build - `make`
 - Build and run - `make run`
+
+### HTML Build
+
+I couldn't figure out a way to include this in the makefile for automation...something about a cart label needed.
+Within PICO-8 run `EXPORT INDEX.HTML`
 
 ## References
 
