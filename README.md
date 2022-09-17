@@ -15,9 +15,14 @@ The uncompressed version of source is at [docs/pico-signals-uncompressed.p8](doc
 
 ### Screenshots
 
-![docs/img/title.png](docs/img/title.png)
-![docs/img/sine.png](docs/img/sine.png)
-
+<details>
+  <summary>Title screen</summary>
+  <img src="docs/img/title.png" alt="title"/>
+</details>
+<details>
+  <summary>Sine wave</summary>
+  <img src="docs/img/sine.png" alt="sine"/>
+</details>
 <details>
   <summary>Square wave</summary>
   <img src="docs/img/square.png" alt="square"/>
