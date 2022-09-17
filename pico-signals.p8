@@ -8,8 +8,8 @@ function _init()
   is_playing = false
 
   sig = {
-    freq = 4,
-    amp = 24,
+    freq = 6,
+    amp = 12,
     offset = 56,
     sample = 127
   }
@@ -23,10 +23,11 @@ function _init()
     "sine",
     "square",
     "triangle",
+    "sawtooth"
     -- "off"
   }
   setting = 0
-  waveform = 2
+  waveform = 1
   last = time()
 end
 
@@ -119,18 +120,35 @@ function draw_signal()
   local p = 128 / sig.freq
   local dx = 128 / sig.sample
 
-  for x=0,127,dx do
+  for x=0,128,dx do
     if waveform == 0 then
-      line(x, ceil(sig.amp * sin(x/p) + sig.offset), x+dx, ceil(sig.amp * sin((x+dx) / p) + sig.offset), 11)
+      line(x, sig_sine(x,p), x+dx, sig_sine(x+dx,p), 11)
     elseif waveform == 1 then
-      line(x, sig.amp * min(sgn(sin(x/p)),0) + sig.offset, x+dx, sig.amp * min(sgn(sin((x+dx)/p)),0) + sig.offset, 11)
+      line(x, sig_square(x,p), x+dx, sig_square(x+dx,p), 11)
     elseif waveform == 2 then
-      -- https://en.wikipedia.org/wiki/Triangle_wave  (use general definition)
-      line(x, sig.amp * (1) + sig.offset, x+dx, sig.amp * (1) + sig.offset, 11)
+      line(x, sig_triangle(x,p), x+dx, sig_triangle(x+dx,p), 11)
+    elseif waveform == 3 then
+      line(x, sig_saw(x,p), x+dx, sig_saw(x+dx,p), 11)
     else
       line(x, sig.offset, x+dx, sig.offset, 11)
     end
   end
+end
+
+function sig_sine(t,p)
+  return ceil(sig.amp * sin(t/p) + sig.offset)
+end
+
+function sig_square(t,p)
+  return sig.amp * sgn(sin(t/p)) + sig.offset
+end
+
+function sig_triangle(t,p)
+  return sig.amp * (2*abs(2*((t/p)-flr((t/p)+(1/2))))-1) + sig.offset
+end
+
+function sig_saw(t,p)
+  return sig.amp * ((t/p)-flr((1/2)+(t/p))) + sig.offset
 end
 
 function draw_menu()
